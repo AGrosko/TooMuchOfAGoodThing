@@ -48,7 +48,7 @@ class shoot extends Phaser.GameObjects.Sprite{
         if(this.stream.flipX==true){
         this.stream.x=this.bullet.x - 40;}
         else{
-        this.stream.x=this.bullet.x + 50;}
+        this.stream.x=this.bullet.x + 40;}
     }
 
 }
