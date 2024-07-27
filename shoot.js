@@ -45,10 +45,19 @@ class shoot extends Phaser.GameObjects.Sprite{
         scene.projectiles.add(this);
     }
     update(){
+        //logic for stream follow
         if(this.stream.flipX==true){
         this.stream.x=this.bullet.x - 40;}
         else{
         this.stream.x=this.bullet.x + 40;}
+
+        //logic for bullet looping through screen
+        if(this.bullet.x < 0){
+            this.bullet.x = 800;
+        }
+        else if(this.bullet.x > 800){
+            this.bullet.x = 0;
+        }
     }
 
 }

@@ -2,9 +2,11 @@ class Playing extends Phaser.Scene{
     constructor(){
         super('Playing');
     }
-    Bullet_Speed = 100;
-    Player_Speed = 75;
+    Bullet_Speed = 150;
+    Player_Speed = 100;
     Player_Jump = -150;
+
+    Enemy_Speed = 75;
 
     create(){
 
@@ -24,16 +26,17 @@ class Playing extends Phaser.Scene{
         //creating projectiles group and initializing physics
         this.projectiles = this.add.group();
 
+
         //initializing keyboard inputs
         this.cursors = this.input.keyboard.createCursorKeys();
         this.spacebar = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
 
         //creating enemy group
-        this.enemies = this.physics.add.group({classType: enemy, runChildUpdate: true});
+        this.enemies = this.add.group();
+       // {classType: enemy, runChildUpdate: true}
+        
 
-        var testEnemy= new enemy(this);
-
-
+        this.spawnTestEnemy();
     }
 
     update(){
@@ -86,11 +89,19 @@ class Playing extends Phaser.Scene{
                 var bullet = this.projectiles.getChildren()[i];
                 bullet.update();
               }
+
+              for(var i = 0; i < this.enemies.getChildren().length; i++){
+                var Enemy = this.enemies.getChildren()[i];
+                Enemy.update();
+              }
              
     }
 
         shootGun(){
          var bullet =   new shoot(this);
+        }
+        spawnTestEnemy(){
+            var Enemy= new enemy(this);
         }
 
 
