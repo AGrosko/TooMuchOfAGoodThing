@@ -3,7 +3,7 @@ class Playing extends Phaser.Scene{
         super('Playing');
     }
     Bullet_Speed = 100;
-    Player_Speed = 75;
+    Player_Speed = 205;
     Player_Jump = -150;
 
     create(){
