@@ -84,7 +84,7 @@ class PlayScene extends Phaser.Scene {
       this.anims.create({
         key: "EnemyRun_anim",
         frames: this.anims.generateFrameNumbers("enemyRun"),
-        frameRate: 5,
+        frameRate: 10,
         repeat: -1
       });
       this.anims.create({
