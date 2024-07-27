@@ -2,9 +2,11 @@ class Playing extends Phaser.Scene{
     constructor(){
         super('Playing');
     }
-    Bullet_Speed = 100;
-    Player_Speed = 75;
+    Bullet_Speed = 150;
+    Player_Speed = 100;
     Player_Jump = -150;
+
+    Enemy_Speed = 75;
 
     create(){
 
@@ -24,17 +26,27 @@ class Playing extends Phaser.Scene{
         //creating projectiles group and initializing physics
         this.projectiles = this.add.group();
 
+
         //initializing keyboard inputs
         this.cursors = this.input.keyboard.createCursorKeys();
         this.spacebar = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
 
+        //creating enemy group
+        this.enemies = this.add.group();
+       // {classType: enemy, runChildUpdate: true}
+        
 
+        this.spawnTestEnemy();
     }
 
     update(){
 
         //inputs for player
-        if (this.cursors.left.isDown)
+ 
+        if (!this.player.body.touching.down){
+            this.player.anims.play('PlayerJump_anim');
+        }
+       else if (this.cursors.left.isDown)
             {
                 this.player.setVelocityX(- this.Player_Speed);
                 this.player.flipX=true;
@@ -52,7 +64,8 @@ class Playing extends Phaser.Scene{
             {
                 this.player.setVelocityX(0);
             
-                this.player.anims.play('PlayerIdle_anim');
+                this.player.anims.play('PlayerIdle_anim',true);
+                
             }
             
             if (this.cursors.up.isDown && this.player.body.touching.down)
@@ -60,9 +73,8 @@ class Playing extends Phaser.Scene{
                 this.player.setVelocityY(this.Player_Jump);
 
             }
-            if (!this.player.body.touching.down){
-                this.player.anims.play('PlayerJump_anim');
-            }
+
+
 
 
             if (Phaser.Input.Keyboard.JustDown(this.spacebar)){
@@ -77,11 +89,19 @@ class Playing extends Phaser.Scene{
                 var bullet = this.projectiles.getChildren()[i];
                 bullet.update();
               }
+
+              for(var i = 0; i < this.enemies.getChildren().length; i++){
+                var Enemy = this.enemies.getChildren()[i];
+                Enemy.update();
+              }
              
     }
 
         shootGun(){
          var bullet =   new shoot(this);
+        }
+        spawnTestEnemy(){
+            var Enemy= new enemy(this);
         }
 
 
