@@ -12,7 +12,7 @@ var config = {
     }
   }
   var gameSettings = {
-    playerSpeed: 200,
+    playerSpeed: 1000,
   }
   
   
