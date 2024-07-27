@@ -28,13 +28,22 @@ class Playing extends Phaser.Scene{
         this.cursors = this.input.keyboard.createCursorKeys();
         this.spacebar = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
 
+        //creating enemy group
+        this.enemies = this.physics.add.group({classType: enemy, runChildUpdate: true});
+
+        var testEnemy= new enemy(this);
+
 
     }
 
     update(){
 
         //inputs for player
-        if (this.cursors.left.isDown)
+ 
+        if (!this.player.body.touching.down){
+            this.player.anims.play('PlayerJump_anim');
+        }
+       else if (this.cursors.left.isDown)
             {
                 this.player.setVelocityX(- this.Player_Speed);
                 this.player.flipX=true;
@@ -52,7 +61,8 @@ class Playing extends Phaser.Scene{
             {
                 this.player.setVelocityX(0);
             
-                this.player.anims.play('PlayerIdle_anim');
+                this.player.anims.play('PlayerIdle_anim',true);
+                
             }
             
             if (this.cursors.up.isDown && this.player.body.touching.down)
@@ -60,9 +70,8 @@ class Playing extends Phaser.Scene{
                 this.player.setVelocityY(this.Player_Jump);
 
             }
-            if (!this.player.body.touching.down){
-                this.player.anims.play('PlayerJump_anim');
-            }
+
+
 
 
             if (Phaser.Input.Keyboard.JustDown(this.spacebar)){
