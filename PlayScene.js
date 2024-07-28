@@ -91,7 +91,7 @@ class PlayScene extends Phaser.Scene {
         key: "EnemyAttack_anim",
         frames: this.anims.generateFrameNumbers("enemyAttack"),
         frameRate: 5,
-        repeat: -1
+        repeat: 0
       });
 
     }

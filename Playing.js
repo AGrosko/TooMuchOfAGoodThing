@@ -50,6 +50,7 @@ class Playing extends Phaser.Scene{
                 bullet.update();
               }
 
+              //updating enemies
               for(var i = 0; i < this.enemies.getChildren().length; i++){
                 var Enemy = this.enemies.getChildren()[i];
                 Enemy.update();
