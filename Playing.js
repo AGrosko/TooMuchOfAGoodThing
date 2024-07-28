@@ -41,7 +41,24 @@ class Playing extends Phaser.Scene{
 
     update(){
 
-        //inputs for player
+ 
+
+             //updating projectiles
+
+             for(var i = 0; i < this.projectiles.getChildren().length; i++){
+                var bullet = this.projectiles.getChildren()[i];
+                bullet.update();
+              }
+
+              for(var i = 0; i < this.enemies.getChildren().length; i++){
+                var Enemy = this.enemies.getChildren()[i];
+                Enemy.update();
+              }
+             
+
+
+         //inputs for player 
+
  
         if (!this.player.body.touching.down){
             this.player.anims.play('PlayerJump_anim');
@@ -73,28 +90,16 @@ class Playing extends Phaser.Scene{
                 this.player.setVelocityY(this.Player_Jump);
 
             }
-
-
-
-
+            
             if (Phaser.Input.Keyboard.JustDown(this.spacebar)){
            
                 if(this.player.active){
                  this.shootGun();}
              }
 
-             //updating projectiles
 
-             for(var i = 0; i < this.projectiles.getChildren().length; i++){
-                var bullet = this.projectiles.getChildren()[i];
-                bullet.update();
-              }
 
-              for(var i = 0; i < this.enemies.getChildren().length; i++){
-                var Enemy = this.enemies.getChildren()[i];
-                Enemy.update();
-              }
-             
+
     }
 
         shootGun(){
