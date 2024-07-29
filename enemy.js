@@ -9,7 +9,7 @@ class enemy extends Phaser.GameObjects.Sprite{
        
         
         
-        scene.physics.add.collider(this,scene.stage);
+        //scene.physics.add.collider(this,scene.stage);
 
 
         scene.add.existing(this);

@@ -35,6 +35,7 @@ class Playing extends Phaser.Scene{
 
         //creating enemy group
         this.enemies = this.physics.add.group();
+        this.physics.add.collider(this.enemies, this.stage);
         //this.enemies.body.setGravityY(300);
         this.spawnTestEnemy();
   
@@ -42,7 +43,6 @@ class Playing extends Phaser.Scene{
 
         this.physics.add.collider(this.projectiles, this.enemies, this.enemyHit ,null, this ); 
        
-       console.log(this.enemies);
 
         
     }
