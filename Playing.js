@@ -41,7 +41,7 @@ class Playing extends Phaser.Scene{
   
 
 
-        this.physics.add.collider(this.projectiles, this.enemies, this.enemyHit ,null, this ); 
+        this.physics.add.overlap(this.projectiles, this.enemies, this.enemyHit ,null, this ); 
        
 
         
