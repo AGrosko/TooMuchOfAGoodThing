@@ -96,6 +96,16 @@ class enemy extends Phaser.GameObjects.Sprite{
         this.body.enable = false;
         this.anims.play("EnemyDeath_anim");
         this.isDead = true;
+
+        this.scene.time.addEvent({
+            delay: 500, 
+            callback: () => {
+
+                this.destroy(); 
+            },
+            callbackScope: this 
+        });
+
     }
 
 

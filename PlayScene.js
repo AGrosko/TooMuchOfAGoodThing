@@ -5,6 +5,12 @@ class PlayScene extends Phaser.Scene {
    
   
     preload(){
+      //load health bar
+      this.load.spritesheet("healthBar", "Assets/sprites/helth bar.png",{
+        frameWidth: 32 ,
+        frameHeight: 32
+      });
+
       //load stage asset
         this.load.image("ground", 'Assets/sprites/ground.PNG');
         this.load.spritesheet("PlayerIdle",'Assets/sprites/playerSprites/Gunner_Blue_Idle.png',{
@@ -70,6 +76,7 @@ class PlayScene extends Phaser.Scene {
       
       this.scene.start("Playing");
 
+
       //player animations
       this.anims.create({
         key: "PlayerIdle_anim",
@@ -90,6 +97,12 @@ class PlayScene extends Phaser.Scene {
         repeat: -1
       });
 
+      this.anims.create({
+        key: "HealthFrames",
+        frames: this.anims.generateFrameNumbers("healthBar"),
+        frameRate: 1,
+        repeat: -1
+      });
      
 
       //enemy animations

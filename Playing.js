@@ -8,6 +8,8 @@ class Playing extends Phaser.Scene{
     Player_Speed = 100;
     Player_Jump = -150;
 
+    Player_Health = 4;
+
     Enemy_Speed = 75;
 
 
@@ -47,12 +49,29 @@ class Playing extends Phaser.Scene{
             this.enemyHit(projectile, enemy);
         },null, this ); 
        
-
+        //adding health bar
+        this.healthBar = this.add.sprite(50,50, 'HealthFrames');
+        this.healthBar.setScale(3.5);
+        this.healthBar.play('HealthFrames');
         
     }
 
     update(){
+        
+        switch(this.Player_Health){
+            case 4:  this.healthBar.setFrame(0);
+                break;
+            case 3: this.healthBar.setFrame(1);
+                break;
+            case 2: this.healthBar.setFrame(2);
+                break;
+            case 1: this.healthBar.setFrame(3);
+                break;
+            case 0: this.healthBar.setFrame(4);
+                break;
+            
 
+        } 
 
 
              //updating projectiles
@@ -125,12 +144,23 @@ class Playing extends Phaser.Scene{
 
         hurtPlayer(){
             console.log("Player Hurt");
+            this.Player_Health --;
+            if(this.Player_Health <= 0){
+                this.playerDeath();
+            }
         }
+
+        playerDeath(){
+            console.log("player dead");
+        }
+
 
         enemyHit(projectile, enemy){
             console.log("enemy hit");
             enemy.hurt();
             projectile.bulletContact();
         }
+
+
 
 }
