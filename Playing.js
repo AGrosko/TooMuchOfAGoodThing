@@ -8,6 +8,8 @@ class Playing extends Phaser.Scene{
 
     Enemy_Speed = 75;
 
+
+    
     create(){
 
         //creating the stage
@@ -24,7 +26,7 @@ class Playing extends Phaser.Scene{
         this.physics.add.collider(this.player,this.stage);
 
         //creating projectiles group and initializing physics
-        this.projectiles = this.add.group();
+        this.projectiles = this.physics.add.group();
 
 
         //initializing keyboard inputs
@@ -32,16 +34,21 @@ class Playing extends Phaser.Scene{
         this.spacebar = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
 
         //creating enemy group
-        this.enemies = this.add.group();
-       // {classType: enemy, runChildUpdate: true}
-        
-
+        this.enemies = this.physics.add.group();
         this.spawnTestEnemy();
+  
+
+
+        this.physics.add.collider(this.projectiles, this.enemies, this.enemyHit ,null, this ); 
+       
+       console.log(this.enemies);
+
+        
     }
 
     update(){
 
- 
+
 
              //updating projectiles
 
@@ -108,7 +115,15 @@ class Playing extends Phaser.Scene{
         }
         spawnTestEnemy(){
             var Enemy= new enemy(this);
+
         }
 
+        hurtPlayer(){
+            console.log("Player Hurt");
+        }
+
+        enemyHit(){
+            console.log("enemy hit");
+        }
 
 }

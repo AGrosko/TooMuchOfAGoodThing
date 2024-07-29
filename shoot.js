@@ -7,7 +7,7 @@ class shoot extends Phaser.GameObjects.Sprite{
         y-=3;
         this.flash = scene.add.image(x,y,'MuzzleFlash');
         
-        this.bullet = scene.add.image(x,y,'SpongeBullet');
+        this.bullet = scene.physics.add.image(x,y,'SpongeBullet');
         this.bullet.setScale(2);
         this.stream = scene.add.image(x,y + 1,'BulletStream');
         this.stream.setScale(2);
@@ -81,7 +81,7 @@ class shoot extends Phaser.GameObjects.Sprite{
             callbackScope: this 
         });
 
-        
+        scene.add.existing(this);
         scene.projectiles.add(this);
     }
     update(){
