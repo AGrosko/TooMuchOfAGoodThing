@@ -15,7 +15,10 @@ class shoot extends Phaser.GameObjects.Image{
 
         scene.add.existing(this);
         scene.projectiles.add(this);
+        
+        this.remainingPeirces = scene.Bullet_Peircing;
 
+        //handles bullet direction
 
         if(scene.player.flipX==false){
              this.flash.x+=20;
@@ -39,6 +42,7 @@ class shoot extends Phaser.GameObjects.Image{
 
 
 
+        //time events for showing muzzel flash and blinking bullet
        this.destroyFlash =  scene.time.addEvent({
             delay: 50, 
             callback: () => {
@@ -101,6 +105,20 @@ class shoot extends Phaser.GameObjects.Image{
         else if(this.x > 800){
             this.x = 0;
         }
+    }
+
+    bulletContact(){
+        console.log("bullet contact");
+        this.remainingPeirces--;
+        console.log(this.remainingPeirces);
+
+        if(this.remainingPeirces <= 0){
+            this.stream.destroy();
+            this.scene.time.removeEvent(this.blinkBullet);
+            this.scene.time.removeEvent(this.blinking);
+            this.destroy(); 
+        }
+
     }
 
 }

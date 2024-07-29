@@ -3,6 +3,8 @@ class Playing extends Phaser.Scene{
         super('Playing');
     }
     Bullet_Speed = 150;
+    Bullet_Peircing = 1;
+
     Player_Speed = 100;
     Player_Jump = -150;
 
@@ -41,7 +43,9 @@ class Playing extends Phaser.Scene{
   
 
 
-        this.physics.add.overlap(this.projectiles, this.enemies, this.enemyHit ,null, this ); 
+        this.physics.add.overlap(this.projectiles, this.enemies, (projectile, enemy) => {
+            this.enemyHit(projectile, enemy);
+        },null, this ); 
        
 
         
@@ -116,16 +120,17 @@ class Playing extends Phaser.Scene{
         }
         spawnTestEnemy(){
             var Enemy= new enemy(this);
-            Enemy.body.setGravityY(300);
-
+           
         }
 
         hurtPlayer(){
             console.log("Player Hurt");
         }
 
-        enemyHit(){
+        enemyHit(projectile, enemy){
             console.log("enemy hit");
+            enemy.hurt();
+            projectile.bulletContact();
         }
 
 }

@@ -54,7 +54,7 @@ class PlayScene extends Phaser.Scene {
           frameWidth:128,
           frameHeight:128,
         });
-        this.load.spritesheet('enemyDeath','Assets/sprites/enemySprites/xeno-grunt-death-falling.png',{
+        this.load.spritesheet('enemyDeath','Assets/sprites/enemySprites/xeno-grunt-knockback.png',{
           frameWidth:128,
           frameHeight:128,
         });
@@ -111,6 +111,16 @@ class PlayScene extends Phaser.Scene {
         frameRate: 5,
         repeat: 0
       });
+      this.anims.create({
+        key: 'EnemyDeath_anim',
+        frames: 
+        [{key: 'enemyDeath'},
+          {key: 'enemyDead'}
+        ]
+        ,
+        frameRate: 5,
+        repeat: 0
+      })
 
     }
    

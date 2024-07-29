@@ -3,24 +3,25 @@ class enemy extends Phaser.GameObjects.Sprite{
     constructor(scene){
         super(scene,80,40);
 
-       // scene.physics.add.sprite(120,40,'enemyIdle');
+  
         this.play('EnemyIdle_anim');
 
        
-        
-        
-        //scene.physics.add.collider(this,scene.stage);
 
 
         scene.add.existing(this);
         scene.physics.world.enableBody(this);
         scene.enemies.add(this);
         this.canMove = true;
-        
+        this.body.setGravityY(300);
+        this.setOrigin(0.5,0.5);
+       this.body.setSize(36,36);
+       this.body.setOffset(30,93);
     }
 
     update(){
 
+        if(!this.isDead){
 
         this.distanceFromPlayer= Math.abs(this.scene.player.x - this.x );
         this.playerHeight = (this.scene.player.y - this.y);
@@ -35,6 +36,7 @@ class enemy extends Phaser.GameObjects.Sprite{
             if(this.flipX == true){
                 this.flipX=false;
                 this.x += 20;
+                this.body.setOffset(30,93);
             }
             
         }
@@ -45,9 +47,12 @@ class enemy extends Phaser.GameObjects.Sprite{
             if(this.flipX == false){
             this.flipX=true;
             this.x -=20;
+            this.body.setOffset(60,93);
             }
             
         }
+
+    }
     }
 
         //enemy attack
@@ -82,6 +87,15 @@ class enemy extends Phaser.GameObjects.Sprite{
 
         
 
+    }
+
+    hurt(){
+        console.log("enemy is hurt");
+
+
+        this.body.enable = false;
+        this.anims.play("EnemyDeath_anim");
+        this.isDead = true;
     }
 
 
