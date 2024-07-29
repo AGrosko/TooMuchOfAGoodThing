@@ -166,6 +166,14 @@ class Playing extends Phaser.Scene{
             console.log("enemy hit");
             enemy.hurt();
             projectile.bulletContact();
+            this.spawnEnemy();
+        }
+        spawnEnemy() {
+            //giving random positions in the game
+            const x = Phaser.Math.Between(50, config.width - 20);
+            const y = Phaser.Math.Between(40, config.height /2);
+            //creates a new enemy
+            const newEnemy = new enemy(this, x, y);
         }
 
 

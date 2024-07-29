@@ -1,7 +1,10 @@
 class enemy extends Phaser.GameObjects.Sprite{
 
     constructor(scene){
-        super(scene,80,40);
+        const x = Phaser.Math.Between(30, config.width - 30);
+        const y = Phaser.Math.Between(40, config.height /2);
+        super(scene,x,y);
+
 
   
         this.play('EnemyIdle_anim');
