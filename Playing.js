@@ -3,11 +3,17 @@ class Playing extends Phaser.Scene{
         super('Playing');
     }
     Bullet_Speed = 150;
+    Bullet_Peircing = 1;
+
     Player_Speed = 100;
     Player_Jump = -150;
 
+    Player_Health = 4;
+
     Enemy_Speed = 75;
 
+
+    
     create(){
 
         //creating the stage
@@ -24,7 +30,7 @@ class Playing extends Phaser.Scene{
         this.physics.add.collider(this.player,this.stage);
 
         //creating projectiles group and initializing physics
-        this.projectiles = this.add.group();
+        this.projectiles = this.physics.add.group();
 
 
         //initializing keyboard inputs
@@ -32,22 +38,66 @@ class Playing extends Phaser.Scene{
         this.spacebar = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
 
         //creating enemy group
-        this.enemies = this.add.group();
-       // {classType: enemy, runChildUpdate: true}
-        
-
+        this.enemies = this.physics.add.group();
+        this.physics.add.collider(this.enemies, this.stage);
+        //this.enemies.body.setGravityY(300);
         this.spawnTestEnemy();
 
-        //creating powerup group
+  
+
+
+        this.physics.add.overlap(this.projectiles, this.enemies, (projectile, enemy) => {
+            this.enemyHit(projectile, enemy);
+        },null, this ); 
+       
+        //adding health bar
+        this.healthBar = this.add.sprite(50,50, 'HealthFrames');
+        this.healthBar.setScale(3.5);
+        this.healthBar.play('HealthFrames');
+
+                //creating powerup group
         this.powerup = this.physics.add.group({
             key: 'powerup',
             setXY: { x: 150, y: 300}
         });
+
     }
 
     update(){
+        
+        switch(this.Player_Health){
+            case 4:  this.healthBar.setFrame(0);
+                break;
+            case 3: this.healthBar.setFrame(1);
+                break;
+            case 2: this.healthBar.setFrame(2);
+                break;
+            case 1: this.healthBar.setFrame(3);
+                break;
+            case 0: this.healthBar.setFrame(4);
+                break;
+            
 
-        //inputs for player
+        } 
+
+
+             //updating projectiles
+
+             for(var i = 0; i < this.projectiles.getChildren().length; i++){
+                var bullet = this.projectiles.getChildren()[i];
+                bullet.update();
+              }
+
+              //updating enemies
+              for(var i = 0; i < this.enemies.getChildren().length; i++){
+                var Enemy = this.enemies.getChildren()[i];
+                Enemy.update();
+              }
+             
+
+
+         //inputs for player 
+
  
         if (!this.player.body.touching.down){
             this.player.anims.play('PlayerJump_anim');
@@ -79,28 +129,16 @@ class Playing extends Phaser.Scene{
                 this.player.setVelocityY(this.Player_Jump);
 
             }
-
-
-
-
+            
             if (Phaser.Input.Keyboard.JustDown(this.spacebar)){
            
                 if(this.player.active){
                  this.shootGun();}
              }
 
-             //updating projectiles
 
-             for(var i = 0; i < this.projectiles.getChildren().length; i++){
-                var bullet = this.projectiles.getChildren()[i];
-                bullet.update();
-              }
 
-              for(var i = 0; i < this.enemies.getChildren().length; i++){
-                var Enemy = this.enemies.getChildren()[i];
-                Enemy.update();
-              }
-             
+
     }
 
         shootGun(){
@@ -108,7 +146,28 @@ class Playing extends Phaser.Scene{
         }
         spawnTestEnemy(){
             var Enemy= new enemy(this);
+           
         }
+
+        hurtPlayer(){
+            console.log("Player Hurt");
+            this.Player_Health --;
+            if(this.Player_Health <= 0){
+                this.playerDeath();
+            }
+        }
+
+        playerDeath(){
+            console.log("player dead");
+        }
+
+
+        enemyHit(projectile, enemy){
+            console.log("enemy hit");
+            enemy.hurt();
+            projectile.bulletContact();
+        }
+
 
 
 }
