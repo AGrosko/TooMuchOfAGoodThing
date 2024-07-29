@@ -37,6 +37,12 @@ class Playing extends Phaser.Scene{
         
 
         this.spawnTestEnemy();
+
+        //creating powerup group
+        this.powerup = this.physics.add.group({
+            key: 'powerup',
+            setXY: { x: 150, y: 300}
+        });
     }
 
     update(){
