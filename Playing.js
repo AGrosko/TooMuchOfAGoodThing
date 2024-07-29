@@ -35,6 +35,7 @@ class Playing extends Phaser.Scene{
 
         //creating enemy group
         this.enemies = this.physics.add.group();
+        //this.enemies.body.setGravityY(300);
         this.spawnTestEnemy();
   
 
@@ -115,6 +116,7 @@ class Playing extends Phaser.Scene{
         }
         spawnTestEnemy(){
             var Enemy= new enemy(this);
+            Enemy.body.setGravityY(300);
 
         }
 
