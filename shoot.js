@@ -1,27 +1,30 @@
-class shoot extends Phaser.GameObjects.Sprite{
+class shoot extends Phaser.GameObjects.Image{
 
     constructor(scene){
         var x = scene.player.x;
         var y = scene.player.y;
-        super(scene, x, y,);
-        y-=3;
-        this.flash = scene.add.image(x,y,'MuzzleFlash');
+        super(scene, x, y-3, 'SpongeBullet_image');
         
-        this.bullet = scene.physics.add.image(x,y,'SpongeBullet');
-        this.bullet.setScale(2);
-        this.stream = scene.add.image(x,y + 1,'BulletStream');
+        this.flash = scene.add.image(x,y-3,'MuzzleFlash_sprite');
+        
+
+        this.stream = scene.add.image(x,y -2,'BulletStream_sprite');
         this.stream.setScale(2);
-        scene.physics.world.enableBody(this.bullet);
+        this.setScale(2);
+        scene.physics.world.enableBody(this);
+
+        scene.add.existing(this);
+        scene.projectiles.add(this);
 
 
         if(scene.player.flipX==false){
              this.flash.x+=20;
              this.flash.flipX=false;
 
-             this.bullet.x+=20;
-             this.bullet.flipX=false;
+             this.x+=20;
+             this.flipX=false;
 
-             this.bullet.body.velocity.x= scene.Bullet_Speed;
+             this.body.velocity.x= scene.Bullet_Speed;
 
              this.stream.flipX=true;
         }
@@ -29,9 +32,9 @@ class shoot extends Phaser.GameObjects.Sprite{
             this.flash.x-=21;
             this.flash.flipX=true;
 
-            this.bullet.x-=21;
-            this.bullet.flipX=true;
-            this.bullet.body.velocity.x= - scene.Bullet_Speed;
+            this.x-=21;
+            this.flipX=true;
+            this.body.velocity.x= - scene.Bullet_Speed;
         }
 
 
@@ -53,12 +56,12 @@ class shoot extends Phaser.GameObjects.Sprite{
                    
                     callback: () => {
                         
-                        if(this.bullet.tintFill){
-                            this.bullet.tintFill = false;
+                        if(this.tintFill){
+                            this.tintFill = false;
                             
                         }
                         else{
-                            this.bullet.setTintFill(0xFFFFFF); 
+                            this.setTintFill(0xFFFFFF); 
                             
                         }
                         
@@ -73,30 +76,30 @@ class shoot extends Phaser.GameObjects.Sprite{
         scene.time.addEvent({
             delay: 10000, 
             callback: () => {
-                this.bullet.destroy(); 
+
                 this.stream.destroy();
                 scene.time.removeEvent(this.blinkBullet);
                 scene.time.removeEvent(this.blinking);
+                this.destroy(); 
             },
             callbackScope: this 
         });
 
-        scene.add.existing(this);
-        scene.projectiles.add(this);
+
     }
     update(){
         //logic for stream follow
         if(this.stream.flipX==true){
-        this.stream.x=this.bullet.x - 80;}
+        this.stream.x=this.x - 80;}
         else{
-        this.stream.x=this.bullet.x + 80;}
+        this.stream.x=this.x + 80;}
 
         //logic for bullet looping through screen
-        if(this.bullet.x < 0){
-            this.bullet.x = 800;
+        if(this.x < 0){
+            this.x = 800;
         }
-        else if(this.bullet.x > 800){
-            this.bullet.x = 0;
+        else if(this.x > 800){
+            this.x = 0;
         }
     }
 
