@@ -9,8 +9,11 @@ class Playing extends Phaser.Scene{
     Player_Jump = -150;
 
     Player_Health = 4;
+    Player_Score = 0;
 
     Enemy_Speed = 75;
+
+    
 
 
     
@@ -53,6 +56,8 @@ class Playing extends Phaser.Scene{
         this.healthBar = this.add.sprite(50,50, 'HealthFrames');
         this.healthBar.setScale(3.5);
         this.healthBar.play('HealthFrames');
+
+        this.scoreCounter = this.add.text(725,25, this.zeroPad(this.Player_Score, 6));
         
     }
 
@@ -159,8 +164,21 @@ class Playing extends Phaser.Scene{
             console.log("enemy hit");
             enemy.hurt();
             projectile.bulletContact();
+            this.Player_Score +=5;
+            this.updateScore();
+           
         }
 
+        zeroPad(number, size){
+            var stringNumber = String(number);
+            while(stringNumber.length < (size || 2)){
+              stringNumber = "0" + stringNumber;
+            }
+            return stringNumber;
+        }
 
+        updateScore(){
+            this.scoreCounter.text = this.zeroPad(this.Player_Score,6);
+        }
 
 }
