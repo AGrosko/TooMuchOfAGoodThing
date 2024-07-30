@@ -12,11 +12,15 @@ class PlayScene extends Phaser.Scene {
       });
 
       //load stage asset
-        this.load.image("ground", 'Assets/sprites/ground.PNG');
+        this.load.image("ground", 'Assets/sprites/Platform.png');
         this.load.spritesheet("PlayerIdle",'Assets/sprites/playerSprites/Gunner_Blue_Idle.png',{
           frameWidth:48,
           frameHeight:48
         });
+        this.load.image("Background", 'Assets/sprites/frame0026.png');
+
+
+
         //load player assets
         this.load.spritesheet('PlayerRun','Assets/sprites/playerSprites/Gunner_Blue_Run.png',{
           frameWidth:48,

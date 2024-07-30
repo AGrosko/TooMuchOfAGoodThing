@@ -19,8 +19,12 @@ class Playing extends Phaser.Scene{
     
     create(){
 
+
         //creating the stage
-        this.stage = this.add.tileSprite(400,350, 600, 70, 'ground');
+        this.backGround = this.add.image(0,0, "Background");
+        this.backGround.setOrigin(0,0);
+        this.backGround.setScale(1.67);
+        this.stage = this.add.tileSprite(400,350, 600, 30, 'ground');
         this.staticGroup = this.physics.add.staticGroup();
         this.staticGroup.add(this.stage);
 
