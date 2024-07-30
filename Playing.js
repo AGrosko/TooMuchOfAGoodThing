@@ -67,6 +67,9 @@ class Playing extends Phaser.Scene{
         //creating powerup group and player/powerup physics
         this.powerup = this.physics.add.group();
         this.physics.add.overlap(this.player, this.powerup, this.collectPowerup, null, this);
+
+        //adding sounds and music
+        this.pickup = this.sound.add('pickup');
         
         
     }
@@ -220,6 +223,7 @@ class Playing extends Phaser.Scene{
         }
         collectPowerup(player, powerup) {
             powerup.disableBody(true, true); //when player touches powerup it goes away
+            this.sound.play('pickup');
         }
 
 }

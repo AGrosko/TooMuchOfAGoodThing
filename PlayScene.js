@@ -76,6 +76,8 @@ class PlayScene extends Phaser.Scene {
         //powerup assets
         this.load.image('powerup','Assets/sprites/powerupSprites/powerup1.png');
 
+        this.load.audio('pickup','Assets/audio/pickup.mp3');
+
     }
 
     
