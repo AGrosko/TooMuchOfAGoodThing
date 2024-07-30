@@ -55,11 +55,10 @@ class Playing extends Phaser.Scene{
         this.healthBar.setScale(3.5);
         this.healthBar.play('HealthFrames');
 
-        //creating powerup group
-        this.powerup = this.physics.add.group({
-            key: 'powerup',
-            setXY: { x: 150, y: 300}
-        });
+        //creating powerup group and player/powerup physics
+        this.powerup = this.physics.add.group();
+        this.physics.add.overlap(this.player, this.powerup, this.collectPowerup, null, this);
+
 
     }
 
@@ -181,6 +180,9 @@ class Playing extends Phaser.Scene{
         }
         spawnPowerup(x, y) {
             this.powerup.create(x,y + 45, 'powerup');
+        }
+        collectPowerup(player, powerup) {
+            powerup.disableBody(true, true);
         }
 
 
