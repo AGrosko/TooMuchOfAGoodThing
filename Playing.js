@@ -221,7 +221,7 @@ class Playing extends Phaser.Scene{
 
         playerDeath(){
             console.log("player dead");
-            //this.resetPlayer(config.width/2 -50, config.height/2);
+            //this.setPlayerPosition(config.width/2 -50, config.height/2);
 
         }
 
@@ -284,7 +284,7 @@ class Playing extends Phaser.Scene{
             this.sound.play('pickup');
             powerup.destroy();
         }
-        resetPlayer(x,y) { //resets player to whatever x or y coordinates are set
+        setPlayerPosition(x,y) { //resets player to whatever x or y coordinates are set
             this.player.setX(x);
             this.player.setY(y);
         }
