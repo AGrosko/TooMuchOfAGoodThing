@@ -9,8 +9,11 @@ class Playing extends Phaser.Scene{
     Player_Jump = -150;
 
     Player_Health = 4;
+    Player_Score = 0;
 
     Enemy_Speed = 75;
+
+    
 
 
     
@@ -55,11 +58,13 @@ class Playing extends Phaser.Scene{
         this.healthBar.setScale(3.5);
         this.healthBar.play('HealthFrames');
 
+        this.scoreCounter = this.add.text(725,25, this.zeroPad(this.Player_Score, 6));
+
         //creating powerup group and player/powerup physics
         this.powerup = this.physics.add.group();
         this.physics.add.overlap(this.player, this.powerup, this.collectPowerup, null, this);
-
-
+        
+        
     }
 
     update(){
@@ -165,11 +170,25 @@ class Playing extends Phaser.Scene{
             console.log("enemy hit");
             enemy.hurt();
             projectile.bulletContact();
+            this.Player_Score +=5;
+            this.updateScore();
             this.spawnEnemy(); //spawns a new enemy when a enemy dies
             if (Phaser.Math.Between(1, 2) === 2) {
                 //activate powerup function
                 this.spawnPowerup(enemy.x, enemy.y);
             }
+        }
+
+        zeroPad(number, size){
+            var stringNumber = String(number);
+            while(stringNumber.length < (size || 2)){
+              stringNumber = "0" + stringNumber;
+            }
+            return stringNumber;
+        }
+
+        updateScore(){
+            this.scoreCounter.text = this.zeroPad(this.Player_Score,6);
         }
         spawnEnemy() {
             const delay = Phaser.Math.Between(1000, 3000); // adding a 1-3 second delay between spawns
@@ -198,7 +217,5 @@ class Playing extends Phaser.Scene{
         collectPowerup(player, powerup) {
             powerup.disableBody(true, true); //when player touches powerup it goes away
         }
-
-
 
 }
