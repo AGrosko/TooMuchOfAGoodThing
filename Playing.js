@@ -55,7 +55,7 @@ class Playing extends Phaser.Scene{
         this.healthBar.setScale(3.5);
         this.healthBar.play('HealthFrames');
 
-                //creating powerup group
+        //creating powerup group
         this.powerup = this.physics.add.group({
             key: 'powerup',
             setXY: { x: 150, y: 300}
@@ -166,7 +166,11 @@ class Playing extends Phaser.Scene{
             console.log("enemy hit");
             enemy.hurt();
             projectile.bulletContact();
-            this.spawnEnemy();
+            this.spawnEnemy(); //spawns a new enemy when a enemy dies
+            if (Phaser.Math.Between(1, 2) === 2) {
+                //activate powerup function
+                this.spawnPowerup(enemy.x, enemy.y);
+            }
         }
         spawnEnemy() {
             //giving random positions in the game
@@ -174,6 +178,9 @@ class Playing extends Phaser.Scene{
             const y = Phaser.Math.Between(40, config.height /2);
             //creates a new enemy
             const newEnemy = new enemy(this, x, y);
+        }
+        spawnPowerup(x, y) {
+            this.powerup.create(x,y + 45, 'powerup');
         }
 
 
