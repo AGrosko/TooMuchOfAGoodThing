@@ -11,6 +11,12 @@ class Playing extends Phaser.Scene{
     Player_Health = 4;
     Player_Score = 0;
 
+    Player_CoolDown = 1000;
+    Player_OnCoolDown = false;
+    Player_ShootTime = 100;
+    Player_isShooting = false;
+    Player_NumBullets = 1;
+
     Enemy_Speed = 75;
 
     
@@ -47,7 +53,7 @@ class Playing extends Phaser.Scene{
         //creating enemy group
         this.enemies = this.physics.add.group();
         this.physics.add.collider(this.enemies, this.stage);
-        //this.enemies.body.setGravityY(300);
+        
         this.spawnTestEnemy();
 
   
@@ -55,6 +61,11 @@ class Playing extends Phaser.Scene{
 
         this.physics.add.overlap(this.projectiles, this.enemies, (projectile, enemy) => {
             this.enemyHit(projectile, enemy);
+        },null, this ); 
+
+        
+        this.physics.add.overlap(this.player,this.projectiles,  (player,projectile) => {
+            this.playerSelfHit(projectile, player);
         },null, this ); 
        
         //adding health bar
@@ -113,7 +124,10 @@ class Playing extends Phaser.Scene{
         if (!this.player.body.touching.down){
             this.player.anims.play('PlayerJump_anim');
         }
-       else if (this.cursors.left.isDown)
+
+
+       else if(!this.Player_isShooting){
+       if (this.cursors.left.isDown)
             {
                 this.player.setVelocityX(- this.Player_Speed);
                 this.player.flipX=true;
@@ -133,18 +147,28 @@ class Playing extends Phaser.Scene{
             
                 this.player.anims.play('PlayerIdle_anim',true);
                 
-            }
-            
+            } 
             if (this.cursors.up.isDown && this.player.body.touching.down)
-            {
-                this.player.setVelocityY(this.Player_Jump);
+                {
+                    this.player.setVelocityY(this.Player_Jump);
+    
+                }
+        }
+            
 
-            }
             
             if (Phaser.Input.Keyboard.JustDown(this.spacebar)){
-           
+
                 if(this.player.active){
                  this.shootGun();}
+
+
+
+
+             }
+             if( this.Player_isShooting && this.player.body.touching.down){
+                this.player.setVelocityX(0);
+                this.player.play('PlayerIdle_anim',true);
              }
 
 
@@ -153,7 +177,31 @@ class Playing extends Phaser.Scene{
     }
 
         shootGun(){
-         var bullet =   new shoot(this);
+
+            if(!this.Player_OnCoolDown){ 
+
+                this.Player_isShooting = true;
+
+                this.time.addEvent({
+                    delay: this.Player_ShootTime * this.Player_NumBullets,
+                    callback: ()=>{
+                        this.Player_isShooting = false;
+                    }
+                });
+
+                var bullet =   new shoot(this);
+                this.Player_OnCoolDown = true;
+
+                this.time.addEvent({
+                    delay: this.Player_CoolDown,
+                    callback: ()=>{
+                        this.Player_OnCoolDown = false;
+                    }
+                });
+            }
+            else{ console.log("gun on cooldown");}
+
+
         }
         spawnTestEnemy(){
             var Enemy= new enemy(this);
@@ -161,11 +209,14 @@ class Playing extends Phaser.Scene{
         }
 
         hurtPlayer(){
-            console.log("Player Hurt");
+
             this.Player_Health --;
             if(this.Player_Health <= 0){
                 this.playerDeath();
+
+
             }
+            
         }
 
         playerDeath(){
@@ -174,7 +225,6 @@ class Playing extends Phaser.Scene{
 
 
         enemyHit(projectile, enemy){
-            console.log("enemy hit");
             enemy.hurt();
             projectile.bulletContact();
             this.Player_Score +=5;
@@ -184,6 +234,12 @@ class Playing extends Phaser.Scene{
                 //activate powerup function
                 this.spawnPowerup(enemy.x, enemy.y);
             }
+        }
+
+        playerSelfHit(projectile, player){
+
+            this.hurtPlayer();
+            projectile.bulletContact();
         }
 
         zeroPad(number, size){
@@ -224,6 +280,7 @@ class Playing extends Phaser.Scene{
         collectPowerup(player, powerup) {
             powerup.disableBody(true, true); //when player touches powerup it goes away
             this.sound.play('pickup');
+            powerup.destroy();
         }
 
 }
