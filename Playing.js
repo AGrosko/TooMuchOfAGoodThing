@@ -172,11 +172,23 @@ class Playing extends Phaser.Scene{
             }
         }
         spawnEnemy() {
+            const delay = Phaser.Math.Between(1000, 3000); // adding a 1-3 second delay between spawns
             //giving random positions in the game
-            const x = Phaser.Math.Between(50, config.width - 20);
-            const y = Phaser.Math.Between(40, config.height /2);
-            //creates a new enemy
-            const newEnemy = new enemy(this, x, y);
+            
+            this.time.addEvent({ 
+                delay: delay,
+                callback: () => {
+                    const x = Phaser.Math.Between(50, config.width - 50);
+                    const y = Phaser.Math.Between(40, config.height /2);
+                    //creates a new enemy
+                    const newEnemy = new enemy(this, x, y);
+                    if (Phaser.Math.Between(1, 5) === 5) {
+                        this.spawnEnemy(); 
+                    }
+                },
+                callbackScope: this
+            });
+
         }
         spawnPowerup(x, y) {
             this.powerup.create(x,y + 45, 'powerup');

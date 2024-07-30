@@ -2,7 +2,7 @@ class enemy extends Phaser.GameObjects.Sprite{
 
     constructor(scene){
         // x and y are random positions on the scene
-        const x = Phaser.Math.Between(50, config.width - 30);
+        const x = Phaser.Math.Between(50, config.width - 50);
         const y = Phaser.Math.Between(40, config.height /2);
         super(scene,x,y);
 
