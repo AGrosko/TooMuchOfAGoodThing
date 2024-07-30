@@ -81,6 +81,13 @@ class Playing extends Phaser.Scene{
 
         //adding sounds and music
         this.pickup = this.sound.add('pickup');
+
+        this.time.addEvent({ //every second the player's position is taken and checked
+            delay: 1000,
+            callback: this.checkPlayerPosition,
+            callbackScope: this,
+            loop: true
+        });
         
         
     }
@@ -124,6 +131,7 @@ class Playing extends Phaser.Scene{
         if (!this.player.body.touching.down){
             this.player.anims.play('PlayerJump_anim');
         }
+        //console.log(`Player Y position: ${this.player.y}`)
 
 
        else if(!this.Player_isShooting){
@@ -287,6 +295,14 @@ class Playing extends Phaser.Scene{
         setPlayerPosition(x,y) { //resets player to whatever x or y coordinates are set
             this.player.setX(x);
             this.player.setY(y);
+        }
+        checkPlayerPosition() { //checks the player position is above a certain y height
+            if (this.player.y > 330) {
+                this.setPlayerPosition(config.width/2 -50, config.height/2);
+                this.hurtPlayer();
+                console.log("player is off the map")
+            }
+
         }
 
 }
