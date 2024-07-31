@@ -78,7 +78,7 @@ class Playing extends Phaser.Scene{
         this.scoreCounter = this.add.text(725,25, this.zeroPad(this.Player_Score, 6));
         this.Total_Score = parseInt(localStorage.getItem('total_score')) || 0; //gets the score from localstorage or 0 if nothing is found
         this.totalScoreCounter = this.add.text(725,7.5, this.zeroPad(this.Total_Score, 6));
-        this.totalScoreText = this.add.text(670,7.5, "TOTAL")
+        this.totalScoreText = this.add.text(670,7.5, "TOTAL");
 
 
         //creating powerup group and player/powerup physics

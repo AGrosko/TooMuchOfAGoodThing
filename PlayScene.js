@@ -83,7 +83,7 @@ class PlayScene extends Phaser.Scene {
     
     create(){
       
-      this.scene.start("Playing");
+      this.scene.start("startMenu");
 
 
       //player animations
