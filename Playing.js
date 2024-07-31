@@ -297,6 +297,7 @@ class Playing extends Phaser.Scene{
             projectile.bulletContact();
         }
 
+        //adds given size in digits to the number
         zeroPad(number, size){
             var stringNumber = String(number);
             while(stringNumber.length < (size || 2)){
@@ -308,8 +309,8 @@ class Playing extends Phaser.Scene{
         updateScore(){
             this.scoreCounter.text = this.zeroPad(this.Player_Score,6); //updates score counter text         
             if (this.Player_Score > this.Total_Score) { //if score is greater than total score, update total score to new score
-                this.Total_Score = this.Player_Score; 
-                console.log("added to total score")
+                this.Total_Score = "High Score:"+ this.Player_Score; 
+                
                 this.totalScoreCounter.text = this.zeroPad(this.Total_Score,6);
                 localStorage.setItem('total_score', this.Total_Score);
             } 

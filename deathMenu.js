@@ -28,7 +28,7 @@ class deathMenu extends Phaser.Scene{
         );
 
         if (this.score == this.highScore){
-            this.add.text(280, 400, "NEW HIGH SCORE!");
+            this.add.text(330, 250, "NEW HIGH SCORE!");
         }
 
 
