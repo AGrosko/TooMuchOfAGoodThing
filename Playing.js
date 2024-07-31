@@ -100,10 +100,7 @@ class Playing extends Phaser.Scene{
 
     update(){
 
-        if (!this.projectiles) {
-            console.error("Player object is missing!");
-            return;
-        }
+
         
         switch(this.Player_Health){
             case 4:  this.healthBar.setFrame(0);
@@ -119,16 +116,16 @@ class Playing extends Phaser.Scene{
             
 
         } 
-            console.log(this.projectiles);
+         
 
              //updating projectiles
 
-             if(this.projectiles.getChildren() != null){
+             
              for(var i = 0; i < this.projectiles.getChildren().length; i++){
                 var bullet = this.projectiles.getChildren()[i];
                 bullet.update();
               }
-            }
+            
 
               //updating enemies
               for(var i = 0; i < this.enemies.getChildren().length; i++){
