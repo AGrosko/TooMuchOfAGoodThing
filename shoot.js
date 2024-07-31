@@ -90,6 +90,7 @@ class shoot extends Phaser.GameObjects.Image{
         });
 
 
+
     }
     update(){
         //logic for stream follow

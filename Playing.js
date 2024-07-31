@@ -17,6 +17,7 @@ class Playing extends Phaser.Scene{
     Player_ShootTime = 100;
     Player_isShooting = false;
     Player_NumBullets = 1;
+    Player_FireRate = 50;
 
     Enemy_Speed = 75;
 
@@ -192,7 +193,7 @@ class Playing extends Phaser.Scene{
             if (Phaser.Input.Keyboard.JustDown(this.spacebar)){
 
                 if(this.player.active){
-                 this.shootGun();}
+                 this.shootGun(this.Player_NumBullets);}
 
 
 
@@ -208,8 +209,8 @@ class Playing extends Phaser.Scene{
 
     }
 
-        shootGun(){
-
+        shootGun(numBullets){
+            
             if(!this.Player_OnCoolDown){ 
 
                 this.Player_isShooting = true;
@@ -221,7 +222,22 @@ class Playing extends Phaser.Scene{
                     }
                 });
 
-                var bullet =   new shoot(this);
+                this.bulletsLeft = numBullets - 1;
+                var bullet =   new shoot(this, this.Player_NumBullets);
+
+                console.log(numBullets);
+                console.log(this.bulletsLeft);
+                if (this.bulletsLeft > 0){
+                    this.time.addEvent({
+                        delay: 100,
+                        callback:()=>{
+                            this.Player_OnCoolDown = false;
+                            this.shootGun(this.bulletsLeft); 
+                        }
+                    });
+                    
+                }
+
                 this.Player_OnCoolDown = true;
 
                 this.time.addEvent({
@@ -376,9 +392,9 @@ class Playing extends Phaser.Scene{
                 case 'Decrease Bullet Speed' : this.Bullet_Speed -= 25;
                     if(this.Bullet_Speed < 50){this.Bullet_Speed = 50;}
                     break;
-                case 'Increase Bullet Number' : this.Player_NumBullets ++;
+                case 'Increase Bullet Number' : this.Player_NumBullets++;
                     break;
-                case 'Decrease Bullet Number' : this.Player_NumBullets --;
+                case 'Decrease Bullet Number' : this.Player_NumBullets--;
                     if(this.Player_NumBullets < 1){this.Player_NumBullets = 1;}
                     break;
 
