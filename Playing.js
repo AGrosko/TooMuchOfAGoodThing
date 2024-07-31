@@ -10,6 +10,7 @@ class Playing extends Phaser.Scene{
 
     Player_Health = 4;
     Player_Score = 0;
+    Total_Score = 0;
 
     Player_CoolDown = 1000;
     Player_OnCoolDown = false;
@@ -73,11 +74,26 @@ class Playing extends Phaser.Scene{
         this.healthBar.setScale(3.5);
         this.healthBar.play('HealthFrames');
 
+        //adding score counters
         this.scoreCounter = this.add.text(725,25, this.zeroPad(this.Player_Score, 6));
+        this.Total_Score = parseInt(localStorage.getItem('total_score')) || 0; //gets the score from localstorage or 0 if nothing is found
+        this.totalScoreCounter = this.add.text(725,7.5, this.zeroPad(this.Total_Score, 6));
+        this.totalScoreText = this.add.text(670,7.5, "TOTAL")
+
 
         //creating powerup group and player/powerup physics
         this.powerup = this.physics.add.group();
         this.physics.add.overlap(this.player, this.powerup, this.collectPowerup, null, this);
+
+        //adding sounds and music
+        this.pickup = this.sound.add('pickup');
+
+        this.time.addEvent({ //every second the player's position is taken and checked
+            delay: 1000,
+            callback: this.checkPlayerPosition,
+            callbackScope: this,
+            loop: true
+        });
         
         
     }
@@ -121,6 +137,7 @@ class Playing extends Phaser.Scene{
         if (!this.player.body.touching.down){
             this.player.anims.play('PlayerJump_anim');
         }
+        //console.log(`Player Y position: ${this.player.y}`)
 
 
        else if(!this.Player_isShooting){
@@ -218,6 +235,8 @@ class Playing extends Phaser.Scene{
 
         playerDeath(){
             console.log("player dead");
+            //this.setPlayerPosition(config.width/2 -50, config.height/2);
+
         }
 
 
@@ -248,8 +267,16 @@ class Playing extends Phaser.Scene{
         }
 
         updateScore(){
-            this.scoreCounter.text = this.zeroPad(this.Player_Score,6);
+            this.scoreCounter.text = this.zeroPad(this.Player_Score,6); //updates score counter text         
+            if (this.Player_Score > this.Total_Score) { //if score is greater than total score, update total score to new score
+                this.Total_Score = this.Player_Score; 
+                console.log("added to total score")
+                this.totalScoreCounter.text = this.zeroPad(this.Total_Score,6);
+                localStorage.setItem('total_score', this.Total_Score);
+            } 
         }
+
+
         spawnEnemy() {
             const delay = Phaser.Math.Between(1000, 3000); // adding a 1-3 second delay between spawns
 
@@ -276,7 +303,20 @@ class Playing extends Phaser.Scene{
         }
         collectPowerup(player, powerup) {
             powerup.disableBody(true, true); //when player touches powerup it goes away
+            this.sound.play('pickup');
             powerup.destroy();
+        }
+        setPlayerPosition(x,y) { //resets player to whatever x or y coordinates are set
+            this.player.setX(x);
+            this.player.setY(y);
+        }
+        checkPlayerPosition() { //checks the player position is above a certain y height
+            if (this.player.y > 330) {
+                this.setPlayerPosition(config.width/2 -50, config.height/2);
+                this.hurtPlayer();
+                console.log("player is off the map")
+            }
+
         }
 
 }
