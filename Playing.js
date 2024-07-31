@@ -20,7 +20,18 @@ class Playing extends Phaser.Scene{
 
     Enemy_Speed = 75;
 
-    
+    PowerUp_List = [
+        'Increase Speed',
+        'Decrease Speed',
+        'Increase Jump',
+        'Decrease Jump',
+        'Increase Bullet Pierces',
+        'Decrease Bullet Pierces',
+        'Increase Bullet Speed',
+        'Decrease Bullet Speed',
+        'Increase Bullet Number',
+        'Decrease Bullet Number',
+    ]
 
 
     
@@ -94,14 +105,16 @@ class Playing extends Phaser.Scene{
             callbackScope: this,
             loop: true
         });
-        
-     this.events.on('resume', () => console.log('game resumed'));
-        
+        this.events.on('resume', this.gameResumed, this);
+
     }
+
+
 
     update(){
 
-
+       
+        
         
         switch(this.Player_Health){
             case 4:  this.healthBar.setFrame(0);
@@ -311,13 +324,72 @@ class Playing extends Phaser.Scene{
             this.sound.play('pickup');
             powerup.destroy();
 
-                game.scene.pause();
-                this.scene.launch("powerUpMenu");
+            //Generate list of powerup options
+               this.powerUpOptions = [
+                this.PowerUp_List[ this.randomListEntry()],
+                this.PowerUp_List[ this.randomListEntry()],
+                this.PowerUp_List[ this.randomListEntry()]
+            ];
 
-                
-
+            
+            //pause scene and pass powerUp options to powerUp menu.
+                this.scene.pause();
+                this.scene.launch("powerUpMenu", this.powerUpOptions);
 
         }
+
+
+        //get random entries from list
+        randomListEntry(){
+
+            this.rand = Math.floor(Math.random() * this.PowerUp_List.length );
+            console.log(this.rand);
+            return this.rand;
+        }
+
+        // gets selection and applys selected powerUp
+        gameResumed(scene,selection){
+            console.log('Game Resumed');
+        
+
+            console.log(this.powerUpOptions[selection]);
+
+            switch(this.powerUpOptions[selection]){
+
+                case 'Increase Speed': this.Player_Speed += 25;
+                    break;
+                case  'Decrease Speed': this.Player_Speed -=25;
+                        if(this.Player_Speed < 25){ this.Player_Speed = 25;}
+                    break;
+                case 'Increase Jump': this.Player_Jump -=  25 ;
+                    break;
+                case 'Decrease Jump': this.Player_Jump +=  25 ;  
+                    if(this.Player_Jump > -25){ this.Player_Jump = 25;}
+                    break;
+                case  'Increase Bullet Pierces' : this.Bullet_Peircing++;
+                    break;
+                case  'Decrease Bullet Pierces' : this.Bullet_Peircing;
+                    if(this.Bullet_Peircing < 1){this.Bullet_Peircing = 1;}
+                    break;    
+                case 'Increase Bullet Speed' : this.Bullet_Speed += 25;
+                    break;
+                case 'Decrease Bullet Speed' : this.Bullet_Speed -= 25;
+                    if(this.Bullet_Speed < 50){this.Bullet_Speed = 50;}
+                    break;
+                case 'Increase Bullet Number' : this.Player_NumBullets ++;
+                    break;
+                case 'Decrease Bullet Number' : this.Player_NumBullets --;
+                    if(this.Player_NumBullets < 1){this.Player_NumBullets = 1;}
+                    break;
+
+
+
+
+
+            }
+
+        }
+
         setPlayerPosition(x,y) { //resets player to whatever x or y coordinates are set
             this.player.setX(x);
             this.player.setY(y);
