@@ -2,7 +2,7 @@ var config = {
     width: 800,
     height: 450,
     backgroundColor: 0x000000,
-    scene: [PlayScene,Playing,startMenu],
+    scene: [PlayScene,Playing,startMenu,powerUpMenu],
     pixelArt: true,
     physics: {
         default: "arcade",
