@@ -2,7 +2,7 @@ var config = {
     width: 800,
     height: 450,
     backgroundColor: 0x000000,
-    scene: [PlayScene,Playing,startMenu,powerUpMenu],
+    scene: [PlayScene,Playing,startMenu,powerUpMenu,deathMenu],
     pixelArt: true,
     physics: {
         default: "arcade",
@@ -10,6 +10,7 @@ var config = {
             debug: false
         }
     }
+
   }
   var gameSettings = {
     playerSpeed: 200,
