@@ -77,8 +77,8 @@ class Playing extends Phaser.Scene{
         //adding score counters
         this.scoreCounter = this.add.text(725,25, this.zeroPad(this.Player_Score, 6));
         this.Total_Score = parseInt(localStorage.getItem('total_score')) || 0; //gets the score from localstorage or 0 if nothing is found
-        this.totalScoreCounter = this.add.text(725,7.5, this.zeroPad(this.Total_Score, 6));
-        this.totalScoreText = this.add.text(670,7.5, "TOTAL")
+        this.totalScoreCounter = this.add.text(610,7.5, "High Score: " + this.zeroPad(this.Total_Score, 6));
+
 
 
         //creating powerup group and player/powerup physics
@@ -95,10 +95,13 @@ class Playing extends Phaser.Scene{
             loop: true
         });
         
+     this.events.on('resume', () => console.log('game resumed'));
         
     }
 
     update(){
+
+
         
         switch(this.Player_Health){
             case 4:  this.healthBar.setFrame(0);
@@ -114,14 +117,16 @@ class Playing extends Phaser.Scene{
             
 
         } 
-
+         
 
              //updating projectiles
 
+             
              for(var i = 0; i < this.projectiles.getChildren().length; i++){
                 var bullet = this.projectiles.getChildren()[i];
                 bullet.update();
               }
+            
 
               //updating enemies
               for(var i = 0; i < this.enemies.getChildren().length; i++){
@@ -305,6 +310,13 @@ class Playing extends Phaser.Scene{
             powerup.disableBody(true, true); //when player touches powerup it goes away
             this.sound.play('pickup');
             powerup.destroy();
+
+                game.scene.pause();
+                this.scene.launch("powerUpMenu");
+
+                
+
+
         }
         setPlayerPosition(x,y) { //resets player to whatever x or y coordinates are set
             this.player.setX(x);
