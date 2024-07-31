@@ -2,24 +2,7 @@ class Playing extends Phaser.Scene{
     constructor(){
         super('Playing');
     }
-    Bullet_Speed = 150;
-    Bullet_Peircing = 1;
 
-    Player_Speed = 100;
-    Player_Jump = -150;
-
-    Player_Health = 4;
-    Player_Score = 0;
-    Total_Score = 0;
-
-    Player_CoolDown = 1000;
-    Player_OnCoolDown = false;
-    Player_ShootTime = 100;
-    Player_isShooting = false;
-    Player_NumBullets = 1;
-    Player_FireRate = 50;
-
-    Enemy_Speed = 75;
 
     PowerUp_List = [
         'Increase Speed',
@@ -38,6 +21,24 @@ class Playing extends Phaser.Scene{
     
     create(){
 
+        this.Bullet_Speed = 150;
+        this.Bullet_Peircing = 1;
+    
+        this.Player_Speed = 100;
+        this.Player_Jump = -150;
+    
+        this.Player_Health = 4;
+        this.Player_Score = 0;
+        this.Total_Score = 0;
+    
+        this.Player_CoolDown = 1000;
+        this.Player_OnCoolDown = false;
+        this.Player_ShootTime = 100;
+        this.Player_isShooting = false;
+        this.Player_NumBullets = 1;
+        this.Player_FireRate = 50;
+    
+        this.Enemy_Speed = 75;
 
         //creating the stage
         this.backGround = this.add.image(0,0, "Background");
@@ -268,8 +269,12 @@ class Playing extends Phaser.Scene{
         }
 
         playerDeath(){
-            console.log("player dead");
-            //this.setPlayerPosition(config.width/2 -50, config.height/2);
+           
+            this.deathScore = this.zeroPad(this.Player_Score, 6);
+            this.scene.start("deathMenu", { score: this.deathScore });
+           
+            
+            this.scene.restart();
 
         }
 
