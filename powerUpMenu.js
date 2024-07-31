@@ -27,14 +27,18 @@ class powerUpMenu extends Phaser.Scene{
         if (Phaser.Input.Keyboard.JustDown(this.spacebar)){
             console.log("Space Pressed");
             this.scene.stop();
-            this.scene.resume("Playing");
+            this.scene.resume("Playing",2);
 
         }
         if (this.cursors.left.isDown){
             console.log("Left pressed");
+            this.scene.stop();
+            this.scene.resume("Playing",1);
         }
         if (this.cursors.right.isDown){
             console.log("Right pressed");
+            this.scene.stop();
+            this.scene.resume("Playing",3);
         }
     }
 

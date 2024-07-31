@@ -95,6 +95,7 @@ class Playing extends Phaser.Scene{
             loop: true
         });
         
+     this.events.on('resume', () => console.log('game resumed'));
         
     }
 

@@ -108,9 +108,9 @@ class shoot extends Phaser.GameObjects.Image{
     }
 
     bulletContact(){
-        console.log("bullet contact");
+
         this.remainingPeirces--;
-        console.log(this.remainingPeirces);
+
 
         if(this.remainingPeirces <= 0){
             this.stream.destroy();
