@@ -275,7 +275,7 @@ class Playing extends Phaser.Scene{
             if (this.Player_Score > this.Total_Score) { //if score is greater than total score, update total score to new score
                 this.Total_Score =  this.Player_Score; 
                 
-                this.totalScoreCounter.text = "High Score"+ this.zeroPad(this.Total_Score,6);
+                this.totalScoreCounter.text = "High Score: "+ this.zeroPad(this.Total_Score,6);
                 localStorage.setItem('total_score', this.Total_Score);
             } 
         }
