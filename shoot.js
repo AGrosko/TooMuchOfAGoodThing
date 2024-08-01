@@ -1,13 +1,13 @@
 class shoot extends Phaser.GameObjects.Image{
 
     constructor(scene){
+
         var x = scene.player.x;
         var y = scene.player.y;
         super(scene, x, y-3, 'SpongeBullet_image');
         
         this.flash = scene.add.image(x,y-3,'MuzzleFlash_sprite');
         
-
         this.stream = scene.add.image(x,y -2,'BulletStream_sprite');
         this.stream.setScale(2);
         this.setScale(2);
@@ -108,10 +108,10 @@ class shoot extends Phaser.GameObjects.Image{
         }
     }
 
+    //checks for remaining pierces and destroys bullet if needed
     bulletContact(){
 
         this.remainingPeirces--;
-
 
         if(this.remainingPeirces <= 0){
             this.stream.destroy();

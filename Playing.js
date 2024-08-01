@@ -3,7 +3,7 @@ class Playing extends Phaser.Scene{
         super('Playing');
     }
 
-
+    //list of available powerUps
     PowerUp_List = [
         'Increase Speed',
         'Decrease Speed',
@@ -15,29 +15,24 @@ class Playing extends Phaser.Scene{
         'Decrease Bullet Speed',
         'Increase Bullet Number',
         'Decrease Bullet Number',
-    ]
-
-
+    ];
     
     create(){
 
+        //Game variables
         this.Bullet_Speed = 150;
         this.Bullet_Peircing = 1;
-    
         this.Player_Speed = 100;
         this.Player_Jump = -150;
-    
         this.Player_Health = 4;
         this.Player_Score = 0;
         this.Total_Score = 0;
-    
         this.Player_CoolDown = 1000;
         this.Player_OnCoolDown = false;
         this.Player_ShootTime = 100;
         this.Player_isShooting = false;
         this.Player_NumBullets = 1;
         this.Player_FireRate = 50;
-    
         this.Enemy_Speed = 75;
 
         //creating the stage
@@ -68,16 +63,14 @@ class Playing extends Phaser.Scene{
         this.enemies = this.physics.add.group();
         this.physics.add.collider(this.enemies, this.stage);
         
+        //spawns first enemy
         this.spawnTestEnemy();
 
-  
-
-
+        //Add collisions for projectiles
         this.physics.add.overlap(this.projectiles, this.enemies, (projectile, enemy) => {
             this.enemyHit(projectile, enemy);
         },null, this ); 
 
-        
         this.physics.add.overlap(this.player,this.projectiles,  (player,projectile) => {
             this.playerSelfHit(projectile, player);
         },null, this ); 
@@ -92,32 +85,30 @@ class Playing extends Phaser.Scene{
         this.Total_Score = parseInt(localStorage.getItem('total_score')) || 0; //gets the score from localstorage or 0 if nothing is found
         this.totalScoreCounter = this.add.text(610,7.5, "High Score: " + this.zeroPad(this.Total_Score, 6));
 
-
-
         //creating powerup group and player/powerup physics
         this.powerup = this.physics.add.group();
         this.physics.add.overlap(this.player, this.powerup, this.collectPowerup, null, this);
 
         //adding sounds and music
         this.pickup = this.sound.add('pickup');
-
-        this.time.addEvent({ //every second the player's position is taken and checked
+        
+        //every second the player's position is taken and checked
+        this.time.addEvent({ 
             delay: 1000,
             callback: this.checkPlayerPosition,
             callbackScope: this,
             loop: true
         });
-        this.events.on('resume', this.gameResumed, this);
 
+        //listener for resumed game to add powerUps
+        this.events.on('resume', this.gameResumed, this);
     }
 
 
 
     update(){
-
-       
         
-        
+        //Player Health Handler
         switch(this.Player_Health){
             case 4:  this.healthBar.setFrame(0);
                 break;
@@ -129,89 +120,65 @@ class Playing extends Phaser.Scene{
                 break;
             case 0: this.healthBar.setFrame(4);
                 break;
-            
-
         } 
          
-
              //updating projectiles
-
-             
              for(var i = 0; i < this.projectiles.getChildren().length; i++){
                 var bullet = this.projectiles.getChildren()[i];
                 bullet.update();
               }
             
-
               //updating enemies
               for(var i = 0; i < this.enemies.getChildren().length; i++){
                 var Enemy = this.enemies.getChildren()[i];
                 Enemy.update();
               }
              
-
-
          //inputs for player 
-
- 
         if (!this.player.body.touching.down){
             this.player.anims.play('PlayerJump_anim');
         }
-        //console.log(`Player Y position: ${this.player.y}`)
 
-
+        //stops player from moving if they are shooting
        else if(!this.Player_isShooting){
        if (this.cursors.left.isDown)
             {
                 this.player.setVelocityX(- this.Player_Speed);
                 this.player.flipX=true;
-                this.player.anims.play('PlayerRun_anim', true);
-                
+                this.player.anims.play('PlayerRun_anim', true);   
             }
             else if (this.cursors.right.isDown)
             {
                 this.player.setVelocityX(this.Player_Speed);
                 this.player.flipX=false;
                 this.player.anims.play('PlayerRun_anim', true);
-
             }
             else
             {
                 this.player.setVelocityX(0);
-            
                 this.player.anims.play('PlayerIdle_anim',true);
-                
             } 
             if (this.cursors.up.isDown && this.player.body.touching.down)
                 {
                     this.player.setVelocityY(this.Player_Jump);
-    
                 }
         }
             
-
-            
+            //Player shoot handler
             if (Phaser.Input.Keyboard.JustDown(this.spacebar)){
-
                 if(this.player.active){
                  this.shootGun(this.Player_NumBullets);}
-
-
-
-
              }
+             //idle animation if player is not moving
              if( this.Player_isShooting && this.player.body.touching.down){
                 this.player.setVelocityX(0);
                 this.player.play('PlayerIdle_anim',true);
              }
-
-
-
-
     }
 
+        //Recursive function recieves number of bullets to be shot and creates bullet and recalls itself -1
         shootGun(numBullets){
-            
+            //checks if player's gun is on cooldown
             if(!this.Player_OnCoolDown){ 
 
                 this.Player_isShooting = true;
@@ -226,8 +193,6 @@ class Playing extends Phaser.Scene{
                 this.bulletsLeft = numBullets - 1;
                 var bullet =   new shoot(this, this.Player_NumBullets);
 
-                console.log(numBullets);
-                console.log(this.bulletsLeft);
                 if (this.bulletsLeft > 0){
                     this.time.addEvent({
                         delay: 100,
@@ -248,37 +213,36 @@ class Playing extends Phaser.Scene{
                     }
                 });
             }
-            else{ console.log("gun on cooldown");}
+            else{ }
 
 
         }
+        //spawns first enemy
         spawnTestEnemy(){
             var Enemy= new enemy(this);
            
         }
 
+        //damages player and checks if dead
         hurtPlayer(){
 
             this.Player_Health --;
             if(this.Player_Health <= 0){
                 this.playerDeath();
-
-
             }
             
         }
 
+        //Switches to death scene
         playerDeath(){
            
             this.deathScore = this.zeroPad(this.Player_Score, 6);
-            this.scene.start("deathMenu", { score: this.deathScore });
-           
-            
+            this.scene.start("deathMenu", { score: this.deathScore }); 
             this.scene.restart();
 
         }
 
-
+        //Kills enemy
         enemyHit(projectile, enemy){
             enemy.hurt();
             projectile.bulletContact();
@@ -291,8 +255,8 @@ class Playing extends Phaser.Scene{
             }
         }
 
+        //handles self hits
         playerSelfHit(projectile, player){
-
             this.hurtPlayer();
             projectile.bulletContact();
         }
@@ -338,11 +302,14 @@ class Playing extends Phaser.Scene{
             });
 
         }
+
         spawnPowerup(x, y) {
             this.powerup.create(x,y + 45, 'powerup');
         }
+
+        //destroys powerUp and starts powerUp menu
         collectPowerup(player, powerup) {
-            powerup.disableBody(true, true); //when player touches powerup it goes away
+            powerup.disableBody(true, true); 
             this.sound.play('pickup');
             powerup.destroy();
 
@@ -353,29 +320,21 @@ class Playing extends Phaser.Scene{
                 this.PowerUp_List[ this.randomListEntry()]
             ];
 
-            
             //pause scene and pass powerUp options to powerUp menu.
                 this.scene.pause();
                 this.scene.launch("powerUpMenu", this.powerUpOptions);
-
         }
 
 
         //get random entries from list
         randomListEntry(){
-
             this.rand = Math.floor(Math.random() * this.PowerUp_List.length );
-            console.log(this.rand);
             return this.rand;
         }
 
         // gets selection and applys selected powerUp
         gameResumed(scene,selection){
-            console.log('Game Resumed');
-        
-
-            console.log(this.powerUpOptions[selection]);
-
+            
             switch(this.powerUpOptions[selection]){
 
                 case 'Increase Speed': this.Player_Speed += 25;
@@ -404,23 +363,22 @@ class Playing extends Phaser.Scene{
                     if(this.Player_NumBullets < 1){this.Player_NumBullets = 1;}
                     break;
 
-
-
-
-
             }
 
         }
 
-        setPlayerPosition(x,y) { //resets player to whatever x or y coordinates are set
+        //resets player to whatever x or y coordinates are set
+        setPlayerPosition(x,y) { 
             this.player.setX(x);
             this.player.setY(y);
         }
-        checkPlayerPosition() { //checks the player position is above a certain y height
+
+        //checks the player position is above a certain y height
+        checkPlayerPosition() { 
             if (this.player.y > 330) {
                 this.setPlayerPosition(config.width/2 -50, config.height/2);
                 this.hurtPlayer();
-                console.log("player is off the map")
+                
             }
 
         }

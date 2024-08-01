@@ -5,13 +5,8 @@ class enemy extends Phaser.GameObjects.Sprite{
         const x = Phaser.Math.Between(50, config.width - 50);
         const y = Phaser.Math.Between(40, config.height /2);
         super(scene,x,y);
-
-
   
         this.play('EnemyIdle_anim');
-
-       
-
 
         scene.add.existing(this);
         scene.physics.world.enableBody(this);
@@ -19,8 +14,8 @@ class enemy extends Phaser.GameObjects.Sprite{
         this.canMove = true;
         this.body.setGravityY(300);
         this.setOrigin(0.5,0.5);
-       this.body.setSize(36,36);
-       this.body.setOffset(30,93);
+        this.body.setSize(36,36);
+        this.body.setOffset(30,93);
     }
 
     update(){
@@ -87,15 +82,12 @@ class enemy extends Phaser.GameObjects.Sprite{
             
             this.alreadyHurt = true;
 
-        }
-
-        
+        }  
 
     }
 
+    //plays death anim and destroys enemy
     hurt(){
-        console.log("enemy is hurt");
-
 
         this.body.enable = false;
         this.anims.play("EnemyDeath_anim");
@@ -111,10 +103,5 @@ class enemy extends Phaser.GameObjects.Sprite{
         });
 
     }
-
-
-
-
-
 
 }
